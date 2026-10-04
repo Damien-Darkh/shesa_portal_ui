@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="icon" type="image/svg+xml" href="./logo.svg">
+  <title>Admin Panel - Employee Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="calendar.css">
+  <script src="./vendor/fullcalendar.min.js"></script>
+  <script src="./vendor/fullcalendar-it.min.js"></script>
+  <script src="./vendor/lucide.min.js"></script>
+</head>
+<body>
+<header id="site-header"></header>
+
+  <main class="main-container space-y">
+    <div class="page-title-section row-between">
+      <div>
+        <p class="subtitle">Administration</p>
+        <h1 class="title">Admin Panel</h1>
+        <p class="description">Manage employees, review time off and see who is away.</p>
+      </div>
+      <a href="add_user.html" class="btn btn-primary" style="margin-top:0;"><i data-lucide="plus"></i> Add Employee</a>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Admin sections" id="admin-tabs">
+      <button type="button" class="tab" role="tab" id="tab-employees" aria-controls="panel-employees" data-tab="employees"><i data-lucide="users"></i> Employees</button>
+      <button type="button" class="tab" role="tab" id="tab-leave" aria-controls="panel-leave" data-tab="leave"><i data-lucide="clipboard-check"></i> Leave approvals <span class="badge js-leave-badge" hidden></span></button>
+      <button type="button" class="tab" role="tab" id="tab-calendar" aria-controls="panel-calendar" data-tab="calendar"><i data-lucide="calendar-days"></i> Leave calendar</button>
+      <button type="button" class="tab" role="tab" id="tab-departments" aria-controls="panel-departments" data-tab="departments"><i data-lucide="building-2"></i> Departments</button>
+    </div>
+
+    <!-- Employees -->
+    <section class="card space-y" id="panel-employees" role="tabpanel" aria-labelledby="tab-employees" hidden>
+      <div class="list-toolbar">
+        <div class="search-bar" style="flex:1;min-width:14rem;"><i data-lucide="search"></i><input type="search" id="emp-search" class="form-input" placeholder="Search by name, email or job title…" aria-label="Search employees"></div>
+        <select id="emp-role" class="form-input" aria-label="Filter by role"><option value="">All roles</option><option value="admin">Admin</option><option value="staff">Staff</option></select>
+        <select id="emp-status" class="form-input" aria-label="Filter by status"><option value="">All statuses</option><option value="active">Active</option><option value="disabled">Disabled</option></select>
+      </div>
+      <p class="form-hint" id="emp-count" role="status" aria-live="polite" style="margin:0;"></p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead><tr>
+            <th scope="col" aria-sort="ascending"><button type="button" class="th-sort" data-sort="name">Name</button></th>
+            <th scope="col" aria-sort="none"><button type="button" class="th-sort" data-sort="email">Email</button></th>
+            <th scope="col" aria-sort="none"><button type="button" class="th-sort" data-sort="role">Role</button></th>
+            <th scope="col" aria-sort="none"><button type="button" class="th-sort" data-sort="devices">Devices</button></th>
+            <th scope="col" aria-sort="none"><button type="button" class="th-sort" data-sort="status">Status</button></th>
+          </tr></thead>
+          <tbody id="users-tbody"></tbody>
+        </table>
+      </div>
+      <nav class="pager" aria-label="Pagination">
+        <label class="pager-size">Rows per page <select id="emp-size" class="form-input"><option>10</option><option>25</option><option>50</option></select></label>
+        <div class="btn-row">
+          <button type="button" class="btn btn-outline btn-sm" id="emp-prev">Previous</button>
+          <span id="emp-page" aria-live="polite"></span>
+          <button type="button" class="btn btn-outline btn-sm" id="emp-next">Next</button>
+        </div>
+      </nav>
+    </section>
+
+    <!-- Leave approvals -->
+    <section class="card space-y" id="panel-leave" role="tabpanel" aria-labelledby="tab-leave" hidden>
+      <div class="row-between" style="align-items:center;">
+        <p class="card-subtitle" style="margin:0;">You can't approve your own request; another admin has to.</p>
+        <div class="btn-row">
+          <button type="button" class="btn btn-sm btn-primary" style="margin-top:0;width:auto;" data-filter="pending">Pending</button>
+          <button type="button" class="btn btn-sm btn-outline" data-filter="all">All requests</button>
+        </div>
+      </div>
+      <!-- Leave filters: built, but hidden until FEATURES.leaveFilters is true in config.js -->
+      <div class="list-toolbar" id="leave-filters" hidden>
+        <select id="lf-employee" class="form-input" aria-label="Filter by employee"><option value="">All employees</option></select>
+        <label class="pager-size">From <input type="date" id="lf-from" class="form-input"></label>
+        <label class="pager-size">To <input type="date" id="lf-to" class="form-input"></label>
+        <button type="button" class="btn btn-outline btn-sm" id="lf-clear">Clear filters</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data">
+          <thead><tr><th scope="col">Employee</th><th scope="col">Type</th><th scope="col">Dates</th><th scope="col">Days</th><th scope="col">Reason</th><th scope="col">Status</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+          <tbody id="leave-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Leave calendar -->
+    <section class="card space-y" id="panel-calendar" role="tabpanel" aria-labelledby="tab-calendar" hidden>
+      <div class="cal-controls">
+        <select id="cal-employee" class="form-input" aria-label="Filter by employee"><option value="">All employees</option></select>
+        <label class="checkbox-row" style="margin:0;"><input type="checkbox" id="cal-pending" checked> Show pending requests</label>
+      </div>
+      <div class="legend" id="cal-legend"></div>
+      <div id="calendar"></div>
+    </section>
+
+    <!-- Departments -->
+    <section class="card space-y" id="panel-departments" role="tabpanel" aria-labelledby="tab-departments" hidden>
+      <div class="row-between" style="align-items:center;">
+        <p class="card-subtitle" style="margin:0;">Departments group employees and can be nested under a parent department.</p>
+        <button type="button" id="d-add" class="btn btn-primary btn-sm" style="margin-top:0;width:auto;"><i data-lucide="plus"></i> Add department</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data">
+          <thead><tr><th scope="col">Name</th><th scope="col">Description</th><th scope="col">Parent department</th><th scope="col">Manager</th><th title="Includes employees in sub-departments">Members</th></tr></thead>
+          <tbody id="dept-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Leave details pop-up -->
+  <div id="leave-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="lm-title">
+    <div class="modal-card">
+      <div class="row-between" style="align-items:flex-start;flex-wrap:nowrap;">
+        <div style="min-width:0;">
+          <h3 class="modal-title" id="lm-title"></h3>
+          <p class="modal-description" id="lm-sub" style="margin-top:.25rem;"></p>
+        </div>
+        <span id="lm-status" style="flex-shrink:0;"></span>
+      </div>
+      <div class="space-y" id="lm-body" style="margin-top:1.25rem;"></div>
+      <div class="modal-actions"><button type="button" class="btn btn-outline" id="lm-close">Close</button></div>
+    </div>
+  </div>
+
+  <script type="module" src="pages/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="icon" type="image/svg+xml" href="./logo.svg">
+  <title>Something went wrong - Employee Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="components.css">
+  <script src="./vendor/lucide.min.js"></script>
+</head>
+<body>
+  <!-- Logo-only header: a 500 can happen before the session/user is available,
+       so this page must not depend on layout.js or dbData. -->
+  <header class="header">
+    <div class="header-container">
+      <div class="header-brand">
+        <a class="brand-logo-img" href="index.html"><img src="./logo_full.svg" alt="Company Logo"></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <div class="error-page">
+      <div class="icon-box" style="background:#fffbeb;color:#b45309;">
+        <i data-lucide="server-crash"></i>
+      </div>
+      <p class="code">500 · Server error</p>
+      <h1 class="title" style="font-size:1.75rem;">Something went wrong on our side</h1>
+      <p class="description">Your request didn't go through and nothing was changed. Try again in a moment. If it keeps happening, contact IT and quote the reference below.</p>
+      <p class="form-hint mono" id="ref">Reference: <!-- Flask: {{ error_ref }} --><span id="ref-code">--</span></p>
+      <div class="btn-row" style="margin-top:.5rem;">
+        <button type="button" class="btn btn-primary" id="retry" style="width:auto;margin-top:0;">
+          <i data-lucide="refresh-ccw"></i> Try again
+        </button>
+        <a href="index.html" class="btn btn-outline">Back to dashboard</a>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="pages/500.js"></script>
+</body>
+</html>

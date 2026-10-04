@@ -1,0 +1,14 @@
+/* calendar.css - FullCalendar theme shared by admin.html and calander.html (moved out of inline <style> blocks for CSP). */
+.fc { --fc-border-color: var(--border-color); --fc-today-bg-color: var(--accent-light); --fc-button-bg-color: #fff; --fc-button-text-color: #1e293b; --fc-button-border-color: #cbd5e1; --fc-button-hover-bg-color: #f8fafc; --fc-button-hover-border-color: #94a3b8; --fc-button-active-bg-color: var(--primary); --fc-button-active-border-color: var(--primary); --fc-button-active-text-color: #fff; font-family: inherit; }
+.fc .fc-toolbar-title { font-size: 1.15rem; font-weight: 700; }
+.fc .fc-button { border-radius: .6rem !important; font-size: .8125rem; font-weight: 600; box-shadow: none !important; }
+.fc .fc-toolbar-chunk { display: flex; align-items: center; gap: .5rem; }
+.fc .fc-button-group { gap: .5rem; }
+.fc .fc-button-group > .fc-button { margin-left: 0 !important; }
+.fc-event { border-radius: .375rem !important; padding: 1px 5px; font-size: .78rem; cursor: pointer; }
+.fc-event.fc-pending { opacity: .7; border: 1.5px dashed rgba(0,0,0,.5) !important; }
+@media (max-width: 639px) { .fc .fc-toolbar { flex-direction: column; gap: .6rem; } }
+.cal-controls { display: flex; flex-wrap: wrap; gap: .75rem 1rem; align-items: center; }
+.cal-controls .form-input { width: auto; min-width: 12rem; }
+  
+.employee-calendar .fc-event { cursor: default; }
